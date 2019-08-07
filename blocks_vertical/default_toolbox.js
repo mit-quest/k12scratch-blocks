@@ -541,6 +541,13 @@ Blockly.Blocks.defaultToolbox = '<xml id="toolbox-categories" style="display: no
       '</value>' +
     '</block>' +
     '<block type="extension_music_reporter" id="extension_music_reporter"></block>' +
+    '<block type="extension_ganpaint" id="extension_ganpaint">' +
+      '<value name="GANPAINT">' +
+        '<shadow type="ganpaint">' +
+          '<field name="GANPAINT"></field>' +
+        '</shadow>' +
+      '</value>' +
+    '</block>' +
     '<block type="extension_microbit_display" id="extension_microbit_display">' +
       '<value name="MATRIX">' +
         '<shadow type="matrix">' +

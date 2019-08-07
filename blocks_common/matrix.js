@@ -19,8 +19,9 @@
  */
 
 /**
- * @fileoverview Matrix blocks for Blockly.
+ * @fileoverview Matrix and GAN Paint blocks for Blockly.
  * @author khanning@gmail.com (Kreg Hanning)
+ * Modified by Philip Tegmark
  */
 'use strict';
 
@@ -44,6 +45,27 @@ Blockly.Blocks['matrix'] = {
         {
           "type": "field_matrix",
           "name": "MATRIX"
+        }
+      ],
+      "outputShape": Blockly.OUTPUT_SHAPE_ROUND,
+      "output": "Number",
+      "extensions": ["colours_pen"]
+    });
+  }
+};
+
+Blockly.Blocks['ganpaint'] = {
+  /**
+   * Block for ganpaint value.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "%1",
+      "args0": [
+        {
+          "type": "field_ganpaint",
+          "name": "GANPAINT"
         }
       ],
       "outputShape": Blockly.OUTPUT_SHAPE_ROUND,
