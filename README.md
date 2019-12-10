@@ -13,7 +13,7 @@ Scratch Blocks is a fork of Google's [Blockly](https://github.com/google/blockly
 
 ## GANPaint
 
-This version of Scratch Gui is meant to accommodate the GANPaint extension. For more background on the extension, please go to [https://github.com/PTegmark/Scratch-GANPaint/blob/master/README.md](https://github.com/PTegmark/Scratch-GANPaint/blob/master/README.md)
+This version of Scratch Blocks is meant to accommodate the GANPaint extension. For more background on the extension, please go to [https://github.com/PTegmark/Scratch-GANPaint/blob/master/README.md](https://github.com/PTegmark/Scratch-GANPaint/blob/master/README.md)
 
 In order for the extension to work properly, you must have
 ```bash
