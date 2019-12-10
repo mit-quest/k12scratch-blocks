@@ -11,6 +11,9 @@ Scratch Blocks is a fork of Google's [Blockly](https://github.com/google/blockly
 
 *This project is in active development and should be considered a "developer preview" at this time.*
 
+## GANPaint
+This version of Scratch Blocks has been edited to include code for the GANpaint extension. In order for the extension to work properly, you must have `python core/GANpaint_request.py` running while you're interacting with the UI.
+
 ## Two Types of Blocks
 ![](https://cloud.githubusercontent.com/assets/747641/15255731/dad4d028-190b-11e6-9c16-8df7445adc96.png)
 
