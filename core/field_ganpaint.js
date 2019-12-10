@@ -576,11 +576,11 @@ Blockly.FieldGANPaint.prototype.showEditor_ = function() {
     for (let j = 0; j < 3; j++){
       var x = 5 + j * (Blockly.FieldGANPaint.CHURCH_BUTTON_SIZE + Blockly.FieldGANPaint.BUTTON_PAD);
       attr = {
-        'x': x + 'px', 'y': y + 'px',
-        'width': Blockly.FieldGANPaint.CHURCH_BUTTON_SIZE,
-        'height': Blockly.FieldGANPaint.CHURCH_BUTTON_SIZE,
-        'clip-path': 'url(#rounded-rect)',
-        'href': Blockly.mainWorkspace.options.pathToMedia + 'extensions/ganpaint_images/church' + (3 * i + j) + '.jpg'    // Used to be: Blockly.FieldGANPaint.CHURCH_IMAGE_LOCATIONS[3 * i + j]
+      'x': x + 'px', 'y': y + 'px',
+      'width': Blockly.FieldGANPaint.CHURCH_BUTTON_SIZE,
+      'height': Blockly.FieldGANPaint.CHURCH_BUTTON_SIZE,
+      'clip-path': 'url(#rounded-rect)',
+      'href': Blockly.mainWorkspace.options.pathToMedia + 'extensions/ganpaint_images/church' + (3 * i + j) + '.jpg'    // Used to be: Blockly.FieldGANPaint.CHURCH_IMAGE_LOCATIONS[3 * i + j]
       };
       var church_button = Blockly.utils.createSvgElement('image', attr, this.churchButtonStage_);
       this.churchButtonLocations_.push([x, y]);
@@ -665,7 +665,11 @@ Blockly.FieldGANPaint.prototype.updateImage = function() {
  */
 Blockly.FieldGANPaint.prototype.onMouseDown = function(e) {
   var bBox = this.mainImageStage_.getBoundingClientRect();
+  if(!this.selectedPoints) {
   this.selectedPoints_ = [[Math.trunc(e.clientX - bBox.left), Math.trunc(e.clientY - bBox.top)]];
+  }else {
+    this.selectedPoints_.push([Math.trunc(e.clientX-bBox.left), Math.trunc(e.clientY-bBox.top)]);
+  }
 
   if (!this.mainImageMoveWrapper_) {
     this.mainImageMoveWrapper_ = 
@@ -715,6 +719,7 @@ Blockly.FieldGANPaint.prototype.onButtonClick = function(e) {
           console.log('"Reset" button clicked. ');  // All this does is display '"Reset" button clicked. ' in the console. 
           this.mainImageAddress_ = this.originalImageAddress_;
           this.updateImage();
+	  this.selectedPoints_ = null;
 
           // ***
           // Delete the cache of undo images. NOT YET IMPLEMENTED. 
@@ -740,6 +745,7 @@ Blockly.FieldGANPaint.prototype.onChurchButtonClick = function(e) {
       this.originalImageAddress_ = Blockly.mainWorkspace.options.pathToMedia + 'extensions/ganpaint_images/church' + i + '.jpg';
       this.mainImageAddress_ = this.originalImageAddress_;
       this.updateImage();
+      this.selectedPoints_ = null;
 
       // ***
       // Delete the cache of undo images. NOT YET IMPLEMENTED. 
@@ -765,7 +771,42 @@ Blockly.FieldGANPaint.prototype.onMouseUp = function() {
   // Send this.selectedPoints, this.brushState, this.drawingState, and the main image to the GAN 
   // Paint server, and get the new main image back from the server. NOT YET IMPLEMENTED. 
   // ***
+  
+  // Get bistring
+  const img_size = 256;
+  var bit_array = Array(img_size).fill(0).map(x => Array(img_size).fill(0));
+  for (let i=0; i< this.selectedPoints_.length; i++){
+	var coords = this.selectedPoints_[i]; 
+  	let x = coords[0];
+	let y = coords[1];
+	bit_array[y][x] = 1;
+		    }
+   var bit_str = "";
+   for (let r=0; r<img_size; r++){
+	for (let c=0; c<img_size; c++){
+		bit_str += bit_array[r][c];
+	}
+   }
 
+   // Use bitstring to save new image
+   console.log("image addr: ", this.originalImageAddress_);
+   console.log("feature: ", this.brushState_);
+   var $ = require("jquery");
+   var jqXHR = $.ajax({
+	               type: "POST",
+	               url: "http://34.70.177.61:5000/ganpaint",
+	               async: false,
+	               data: { 'addr': this.originalImageAddress_,
+		               'feature': this.brushState_,
+		               'bitstring': bit_str },
+		       error: function(request, status, error) {
+			               console.log("Error: " + error)
+			             }
+   });
+
+   console.log(jqXHR.responseText);
+   this.mainImageAddress_ = Blockly.mainWorkspace.options.pathToMedia + 'extensions/ganpaint_images/church.jpg';
+   this.updateImage();
 };
 
 /**
