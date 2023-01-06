@@ -28,8 +28,8 @@
     "translate:update": "npm run translate:sync:src && npm run translate:sync:translations"
   },
   "dependencies": {
-    "exports-loader": "0.6.3",
-    "imports-loader": "0.6.5",
+    "exports-loader": "0.6.4",
+    "imports-loader": "4.0.1",
     "jquery": "^3.4.1"
   },
   "devDependencies": {
